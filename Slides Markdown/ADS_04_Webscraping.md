@@ -528,9 +528,9 @@ head(allURLs,3)
 ```
 
 ```
-[1] "http://www.j-archive.com/showgame.php?game_id=6289"
-[2] "http://www.j-archive.com/showgame.php?game_id=6288"
-[3] "http://www.j-archive.com/showgame.php?game_id=6287"
+[1] "http://www.j-archive.com/showgame.php?game_id=6295"
+[2] "http://www.j-archive.com/showgame.php?game_id=6293"
+[3] "http://www.j-archive.com/showgame.php?game_id=6292"
 ```
 
 ```r
@@ -543,12 +543,12 @@ map_chr(head(allURLs), getTitleOfEpisode)
 ```
 
 ```
-[1] "Show #7996 - Monday, May 20, 2019"   
-[2] "Show #7995 - Friday, May 17, 2019"   
-[3] "Show #7994 - Thursday, May 16, 2019" 
-[4] "Show #7993 - Wednesday, May 15, 2019"
-[5] "Show #7992 - Tuesday, May 14, 2019"  
-[6] "Show #7991 - Monday, May 13, 2019"   
+[1] "Show #8001 - Monday, May 27, 2019"   
+[2] "Show #8000 - Friday, May 24, 2019"   
+[3] "Show #7999 - Thursday, May 23, 2019" 
+[4] "Show #7998 - Wednesday, May 22, 2019"
+[5] "Show #7997 - Tuesday, May 21, 2019"  
+[6] "Show #7996 - Monday, May 20, 2019"   
 ```
     
 
