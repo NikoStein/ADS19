@@ -116,7 +116,7 @@ library('maptools')
 library(tidyverse)
 gpclibPermit()
 
-readRDS(gzcon(url("https://biogeo.ucdavis.edu/data/gadm3.6/Rsf/gadm36_DEU_1_sf.rds")))
+gadm36_DEU_1_sf = readRDS(gzcon(url("https://biogeo.ucdavis.edu/data/gadm3.6/Rsf/gadm36_DEU_1_sf.rds")))
 
 mapdata = fortify(gadm36_DEU_1_sf, region="NAME_1")
 ```
