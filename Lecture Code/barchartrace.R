@@ -6,14 +6,23 @@ library(tidyverse)
 
 library(gapminder)
 
+gapminderFull = read.csv2("Lecture Code/gapminder.csv", sep = ";", dec=".", header =T)
+
+gapminderFull %>%
+  rename(country = ï..Total.population) %>%
+  gather(year, pop, -country) %>%
+  mutate(year = as.numeric(sub("X","",year))) %>%
+  mutate(pop = as.numeric(str_remove_all(pop,","))) -> gapminderFull
+
 all_data <- data.frame()
 
-all_years <- data.frame(year = seq(1952, 2007, 1))
+all_years <- data.frame(year = seq(1800, 2015, 1))
 
 for(yearCurrent in all_years$year) {
   data = data.frame(country = unique(gapminder$country))
+  data = left_join(data, unique(select(gapminder, country, continent)))
   data$year = yearCurrent 
-  data = data %>% left_join(gapminder %>% filter(year==yearCurrent) %>% select(year, country, pop, continent))
+  data = data %>% left_join(gapminderFull %>% filter(year==yearCurrent) %>% select(year, country, pop))
   all_data <- bind_rows(all_data, data)
 }
 
@@ -38,8 +47,16 @@ all_data_interp <- all_data_interp %>%
   group_by(country) %>%
   mutate(pop=approx(year,pop,year)$y)
 
-p <- plotData %>%
-  ggplot(aes(x = -top_10_pop,y = pop, group = country)) +
+data <- all_data_interp %>%
+  na.omit() %>%
+  group_by(year) %>%
+  arrange(-pop) %>%
+  mutate(rank=row_number()) %>%
+  filter(rank<=10)
+
+
+p <- data %>%
+  ggplot(aes(x = -rank,y = pop, group = country)) +
   geom_tile(aes(y = pop / 2, height = pop, fill = continent), width = 0.9) +
   geom_text(aes(label = country), hjust = "right", colour = "black", fontface = "bold", nudge_y = -100000) +
   geom_text(aes(label = scales::comma(pop)), hjust = "left", nudge_y = 100000, colour = "grey30") +
@@ -59,4 +76,6 @@ p <- plotData %>%
        subtitle='Population in {round(frame_time,0)}',
        caption='Source: gapminder')
 
-animate(p, nframes = 325, fps = 15, end_pause = 50, width = 600, height = 450)
+anim = animate(p, nframes = 400, fps = 25, end_pause = 50, width = 600, height = 450)
+
+anim

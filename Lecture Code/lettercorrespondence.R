@@ -48,8 +48,7 @@ routes_tidy %>%
 ggraph(routes_tidy) + geom_edge_link() + geom_node_point() + theme_graph()
 
 ggraph(routes_tidy, layout = "graphopt") + 
-  geom_node_point() +
-  geom_edge_link(aes(width = weight), alpha = 0.8) + 
+  geom_edge_link(aes(width = log1p(weight)), alpha = 0.8) + 
   scale_edge_width(range = c(0.2, 2)) +
   geom_node_text(aes(label = label), repel = TRUE) +
   labs(edge_width = "Letters") +

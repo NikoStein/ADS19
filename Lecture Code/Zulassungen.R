@@ -36,7 +36,7 @@ laender$id = rownames(gadm36_DEU_1_sp@data)
 mapdata %>% 
   left_join(laender) %>%
   left_join(df.complete) %>%
-  filter(Antrieb == "Diesel") %>%
+  filter(Antrieb == "Elektr") %>%
   ggplot() +
   geom_polygon(aes(x=long, y=lat, fill = Anteil, group=group)) +
   coord_fixed() + 
