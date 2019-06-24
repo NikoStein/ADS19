@@ -40,8 +40,6 @@ quotes %>%
          authors = iconv(authors, "latin1", "ASCII", sub="")) -> dfQuotes
 
 #c)
-url = urls[1]
-
 getAuthorUrls = function(url){
   read_html(url) -> rawPage
   
@@ -99,9 +97,7 @@ quotes %>%
   summarise(averageQuotes = mean(nQuotes))
 
 quotes %>%
-  mutate(hasTag = str_detect(tags, 'life')) %>%
-  filter(hasTag == TRUE) %>%
-  select(-hasTag)
+  filter(str_detect(tags, 'life'))
 
 
 authorDetails %>%

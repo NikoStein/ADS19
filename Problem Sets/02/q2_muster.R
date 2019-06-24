@@ -1,7 +1,7 @@
 require(rvest)
 require(tidyverse)
 
-#a)
+#a - Version 1)
 url = 'https://www.mydealz.de/new?page=1'
 
 getNodeDetails = function(node){
@@ -43,11 +43,40 @@ getDealz = function(url){
   deals = map_df(nodes, getNodeDetails)
 }
 
-
 dealz = getDealz(url)
 
 dealz = map_df(paste0('https://www.mydealz.de/new?page=', 1:50), getDealz)
 
+#a - version 2
+getDeals = function(url){
+  url %>%
+    read_html(url) %>%
+    html_nodes('.threadGrid') -> nodes
+  
+  nodes %>%
+    html_node(".vote-temp") %>%
+    html_text() -> temperature
+  
+  nodes %>%
+    html_node(".thread-title--list") %>%
+    html_text() -> title
+  
+  nodes %>%
+    html_node(".thread-title--list") %>%
+    html_attr('href') -> deepLink  
+  
+  nodes %>%
+    html_node(".thread-username") %>%
+    html_text() -> author
+  
+  nodes %>%
+    html_node(".cept-comment-link") %>%
+    html_text() -> numberOfComments
+  
+  deal = data.frame(title, temperature, author, deepLink, numberOfComments)
+}
+
+dealz = map_df(paste0('https://www.mydealz.de/new?page=', 1:50), getDeals)
 
 #b
 dealz %>%
