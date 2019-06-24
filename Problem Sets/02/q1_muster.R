@@ -1,6 +1,8 @@
 require(rvest)
 require(tidyverse)
 
+
+
 #a)
 getQuotes <- function(url){
   read_html(url) -> rawPage
@@ -80,7 +82,6 @@ authorDetails %>%
          month = str_extract(bornDate, '[:alpha:]*'),
          day = str_extract(bornDate, '[0-9]{2}')) %>%
   arrange(year) -> authorDetails
-
 
 authorDetails %>%
   filter(year %in% 1800:1899) %>%
