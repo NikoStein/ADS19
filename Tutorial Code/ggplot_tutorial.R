@@ -19,3 +19,22 @@ soccerTable = function(year){
 
 years = unique(dfSoccer$Year)
 bundesliga = map_df(years, soccerTable)
+
+
+
+# Wie bestimmt man den Gewinner pro Saison? Welche Mannschaft hat die meisten Tore geschossen?
+bundesliga %>%
+  group_by(Year) %>%
+  filter(Points == max(Points))
+
+
+# Prozente in Labels?
+bundesliga %>%
+  group_by(Year) %>%
+  arrange(desc(Points)) %>%
+  mutate(rank = row_number()) %>%
+  group_by(team) %>%
+  summarise(shareWon = length(Year[rank==1]) / length(years)) %>%
+  arrange(desc(shareWon)) %>%
+  head(5) %>%
+  ggplot(aes(x=team, y=shareWon)) + geom_col() + scale_y_continuous(labels = scales::percent)
