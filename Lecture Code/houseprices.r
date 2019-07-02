@@ -74,6 +74,8 @@ predictions_boost <- boost_mod %>%
 
 predictions = list(predictions_lm, predictions_rf, predictions_boost)
 
+predictions %>% map(function(x){metrics(x, truth = price, estimate = .pred)})
+
 importance <- xgboost::xgb.importance(boost_mod$fit$feature_names, model = boost_mod$fit)
 xgboost::xgb.plot.importance(importance)
 
