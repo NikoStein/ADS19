@@ -21,7 +21,6 @@ years = unique(dfSoccer$Year)
 bundesliga = map_df(years, soccerTable)
 
 
-
 # Wie bestimmt man den Gewinner pro Saison? Welche Mannschaft hat die meisten Tore geschossen?
 bundesliga %>%
   group_by(Year) %>%
@@ -37,4 +36,6 @@ bundesliga %>%
   summarise(shareWon = length(Year[rank==1]) / length(years)) %>%
   arrange(desc(shareWon)) %>%
   head(5) %>%
-  ggplot(aes(x=team, y=shareWon)) + geom_col() + scale_y_continuous(labels = scales::percent)
+  ggplot(aes(x=team, y=shareWon)) + 
+  geom_col() + scale_y_continuous(labels = scales::percent) +
+  theme_bw() + ylab("Anteil Meister") + xlab("")
