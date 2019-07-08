@@ -341,8 +341,8 @@ Operations:
 
 Factor variables from default, PAY_0, PAY_2, PAY_3, PAY_4, ...
 Dummy variables from SEX, EDUCATION, MARRIAGE, PAY_0, PAY_2, PAY_3, ...
-Scaling for all_numeric()
-Sparse, unbalanced variable filter on all_predictors()
+Scaling for all_numeric
+Sparse, unbalanced variable filter on all_predictors
 ```
 
 
@@ -403,16 +403,16 @@ credit_train_preprocessed
 # A tibble: 24,001 x 40
    LIMIT_BAL   AGE BILL_AMT1 BILL_AMT2 BILL_AMT3 BILL_AMT4 BILL_AMT5
        <dbl> <dbl>     <dbl>     <dbl>     <dbl>     <dbl>     <dbl>
- 1     0.154  2.60    0.0533   0.0438    0.00996   0         0      
- 2     0.924  2.82    0.0365   0.0244    0.0388    0.0512    0.0573 
- 3     0.693  3.69    0.398    0.198     0.196     0.224     0.248  
- 4     0.385  6.18    0.117    0.0801    0.518     0.328     0.317  
- 5     0.385  4.01    0.877    0.806     0.833     0.304     0.325  
- 6     0.770  2.49    0.162    0.00537   0.00869   0.00346  -0.00264
- 7     1.08   3.04    0.154    0.199     0.175     0.191     0.196  
- 8     1.54   3.69    0.151    0.138     0.0800    0.0394    0.0303 
- 9     2.00   5.53    0.167    0.306     0.144     0.133     0.369  
-10     4.85   4.44    0.165    0.0918    0.0940    0.102     0.108  
+ 1     0.154  2.60    0.0532   0.0436    0.00994   0         0      
+ 2     0.926  2.81    0.0364   0.0243    0.0387    0.0509    0.0568 
+ 3     0.694  3.68    0.397    0.197     0.196     0.223     0.246  
+ 4     0.386  4.00    0.638    0.679     0.711     0.440     0.476  
+ 5     0.386  6.16    0.117    0.0798    0.517     0.325     0.315  
+ 6     3.86   3.14    5.00     5.80      6.42      8.43      7.94   
+ 7     0.772  2.49    0.161    0.00535   0.00867   0.00343  -0.00261
+ 8     1.08   3.03    0.153    0.198     0.175     0.190     0.194  
+ 9     0.154  3.78    0        0         0         0         0.214  
+10     1.54   3.68    0.150    0.138     0.0798    0.0391    0.0301 
 # … with 23,991 more rows, and 33 more variables: BILL_AMT6 <dbl>,
 #   PAY_AMT1 <dbl>, PAY_AMT2 <dbl>, PAY_AMT3 <dbl>, PAY_AMT4 <dbl>,
 #   PAY_AMT5 <dbl>, PAY_AMT6 <dbl>, default <fct>, SEX_X2 <dbl>,
@@ -429,45 +429,96 @@ Specifying the models
 ====
 
 
+```r
+logistic_glm <-
+  logistic_reg(mode = "classification") %>%
+  set_engine("glm") %>%
+  fit(default ~ ., data = credit_train_preprocessed)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+rf_mod <- 
+  rand_forest(
+    mode = "classification",
+    trees = 250) %>%
+  set_engine("ranger") %>%
+  fit(default ~ ., data = credit_train_preprocessed)
 ```
-processing file: ADS_08_Modeling.Rpres
-── Attaching packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
-✔ ggplot2 3.2.0     ✔ purrr   0.3.2
-✔ tibble  2.1.3     ✔ dplyr   0.8.1
-✔ tidyr   0.8.3     ✔ stringr 1.4.0
-✔ readr   1.3.1     ✔ forcats 0.4.0
-── Conflicts ──────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-Registered S3 method overwritten by 'xts':
-  method     from
-  as.zoo.xts zoo 
-── Attaching packages ──────────────────────────────────────────────────────────────────────────────────────────────────────────── tidymodels 0.0.2 ──
-✔ broom     0.5.2       ✔ parsnip   0.0.2  
-✔ dials     0.0.2       ✔ recipes   0.1.5  
-✔ infer     0.4.0.1     ✔ yardstick 0.0.3  
-── Conflicts ─────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidymodels_conflicts() ──
-✖ scales::discard() masks purrr::discard()
-✖ dplyr::filter()   masks stats::filter()
-✖ recipes::fixed()  masks stringr::fixed()
-✖ dplyr::lag()      masks stats::lag()
-✖ yardstick::spec() masks readr::spec()
-✖ recipes::step()   masks stats::step()
-Quitting from lines 226-238 (ADS_08_Modeling.Rpres) 
-Fehler: This engine requires some package installs: 'ranger'
-Ausführung angehalten
+
+***
+
+
+```r
+boost_mod <-
+  boost_tree(mode = "classification",
+             trees = 1500,
+             mtry = 3,
+             learn_rate = 0.03,
+             sample_size = 1,
+             tree_depth = 5) %>%
+  set_engine("xgboost") %>%
+    fit(default ~ ., data = credit_train_preprocessed)
 ```
+
+Running predictions
+=====
+
+
+```r
+predictions_glm <- logistic_glm %>%
+  predict(new_data = credit_test_preprocessed) %>%
+  bind_cols(credit_test_preprocessed %>% dplyr::select(default))
+
+predictions_rf <- rf_mod %>%
+  predict(new_data = credit_test_preprocessed) %>%
+  bind_cols(credit_test_preprocessed %>% dplyr::select(default))
+
+predictions_boost <- boost_mod %>%
+  predict(new_data = credit_test_preprocessed) %>%
+  bind_cols(credit_test_preprocessed %>% dplyr::select(default))
+```
+
+Evaluating the results
+====
+
+
+```r
+predictions_glm %>%
+  conf_mat(default, .pred_class)
+predictions_rf %>%
+  conf_mat(default, .pred_class)
+```
+***
+
+```r
+predictions_boost %>%
+  conf_mat(default, .pred_class)
+```
+
+Evaluating the results (2)
+====
+
+```r
+predictions_glm %>%
+  conf_mat(default, .pred_class) %>%
+  summary() %>%
+  dplyr::select(-.estimator) %>%
+  filter(.metric %in%
+    c("accuracy", "mcc", "f_meas"))
+
+predictions_rf %>%
+  conf_mat(default, .pred_class) %>%
+  summary() %>%
+  dplyr::select(-.estimator) %>%
+  filter(.metric %in%
+    c("accuracy", "mcc", "f_meas"))
+```
+***
+
+```r
+predictions_boost %>%
+  conf_mat(default, .pred_class) %>%
+  summary() %>%
+  dplyr::select(-.estimator) %>%
+  filter(.metric %in%
+    c("accuracy", "mcc", "f_meas"))
+```
+
