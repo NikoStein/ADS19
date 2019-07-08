@@ -1,6 +1,8 @@
 require(rvest)
 require(tidyverse)
 
+
+
 #a)
 getQuotes <- function(url){
   read_html(url) -> rawPage
@@ -40,8 +42,6 @@ quotes %>%
          authors = iconv(authors, "latin1", "ASCII", sub="")) -> dfQuotes
 
 #c)
-url = urls[1]
-
 getAuthorUrls = function(url){
   read_html(url) -> rawPage
   
@@ -83,7 +83,6 @@ authorDetails %>%
          day = str_extract(bornDate, '[0-9]{2}')) %>%
   arrange(year) -> authorDetails
 
-
 authorDetails %>%
   filter(year %in% 1800:1899) %>%
   summarise(count = n())
@@ -99,9 +98,7 @@ quotes %>%
   summarise(averageQuotes = mean(nQuotes))
 
 quotes %>%
-  mutate(hasTag = str_detect(tags, 'life')) %>%
-  filter(hasTag == TRUE) %>%
-  select(-hasTag)
+  filter(str_detect(tags, 'life'))
 
 
 authorDetails %>%
