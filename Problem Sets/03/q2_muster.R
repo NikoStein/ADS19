@@ -22,9 +22,8 @@ clinton_emails %>%
 # a)
 clinton_emails %>%
   as_tbl_graph(directed = FALSE) %>%
-  ggraph() + 
+  ggraph() + geom_node_point() + 
   geom_edge_link(width = 1, alpha = 0.1) + 
-  geom_node_point() +
   geom_node_text(aes(label = name)) 
   
   
@@ -70,5 +69,6 @@ emailGraph %>%
   ggraph() + 
   geom_edge_link(aes(width = log(count)), alpha = 0.2, show.legend = FALSE) + 
   geom_node_point(aes(size = log(centrality)), show.legend = FALSE) +
-  geom_node_label(aes(filter=centrality>=500, label=name), repel = TRUE, show.legend = FALSE) +
+  geom_node_label(aes(filter=centrality>=500, label=name), 
+                  repel = TRUE, show.legend = FALSE) +
   theme_graph()
