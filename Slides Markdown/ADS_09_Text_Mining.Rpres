@@ -582,7 +582,7 @@ congress_top_terms
 Visualization
 ====
 
-```{r fig.height=10, fig.width=15}
+```{r fig.height=15, fig.width=30}
 g
 ```
 
