@@ -247,7 +247,7 @@ word_cooccurences %>%
         geom_node_text(aes(label = name), vjust = 1.8) +
         ggtitle(expression(paste("Word Network in Jane Austen's ", 
                                  italic("Pride and Prejudice")))) +
-        theme_void()
+        theme_void() -> g1
 
 ```
 
@@ -267,9 +267,23 @@ word_cooccurences %>%
         geom_node_text(aes(label = name), vjust = 1.8) +
         ggtitle(expression(paste("Word Network in Jane Austen's ", 
                                  italic("Emma")))) +
-        theme_void()
+        theme_void() -> g2
 
 ```
+
+Networks
+====
+
+```{r}
+g1
+```
+
+***
+
+```{r}
+g2
+```
+
 
 
 
@@ -364,7 +378,7 @@ Inverse Term Frequency
 
 * The inverse document frequency for any given term is defined as
 
-$$idf(term) = ln \left( \frac{n_{docs}}{n_{docs containing term}} \right) $$
+$$idf(term) = ln \left( \frac{n_{docs}}{n_{docs \quad containing \quad term}} \right) $$
 
 Super quick physics example
 ====
@@ -552,7 +566,9 @@ congress_lda
 
 ```{r}
 congress_topics <- tidy(congress_lda, matrix = "beta")
-congress_topics
+congress_topics %>%
+  group_by(topic) %>%
+  top_n(1, beta)
 ```
 
 Results
