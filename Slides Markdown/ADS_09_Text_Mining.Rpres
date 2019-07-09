@@ -49,7 +49,6 @@ library(ggraph)
 library(igraph)
 library(tidymodels)
 library(textrecipes)
-library(RTextTools)
 ```
 
 
