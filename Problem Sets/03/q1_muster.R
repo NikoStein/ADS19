@@ -10,24 +10,29 @@ euElections = read_csv2("https://www.bundeswahlleiter.de/dam/jcr/5441f564-1f29-4
 euElections %>%
   filter(Gebietsart == 'Land', Gruppenart == "Partei") -> euElections
 
-euElections$Gruppenname = iconv(euElections$Gruppenname, from = 'latin1', to = 'ascii', sub="")
+#euElections$Gruppenname = iconv(euElections$Gruppenname, from = 'latin1', to = 'ascii', sub="")
 
 # b)
+parteien = c("CDU", "CSU", "SPD", "AfD", "DIE LINKE", "GRÜNE", "FDP")
+
 euElections %>%
-  filter(Gruppenname %in% c("CDU", "CSU", "SPD", "AfD", "DIE LINKE", "GRNE", "FDP")) %>%
-  ggplot(aes(x=Gruppenname, y=Prozent)) + geom_col() + facet_wrap(.~Gebietsname) + theme_bw() +
+  filter(Gruppenname %in% parteien) %>%
+  ggplot(aes(x=Gruppenname, y=Prozent)) + geom_col() + 
+  facet_wrap(.~Gebietsname) + theme_bw() +
   theme(axis.text.x = element_text(angle = 90))
 
 euElections %>%
-  filter(Gruppenname %in% c("CDU", "CSU", "SPD", "AfD", "DIE LINKE", "GRNE", "FDP")) %>%
-  ggplot(aes(x=Gebietsname, y=Prozent, fill=Gruppenname)) + geom_col() + theme_bw() +
+  filter(Gruppenname %in% parteien) %>%
+  ggplot(aes(x=Gebietsname, y=Prozent, fill=Gruppenname)) + 
+  geom_col() + theme_bw() +
   theme(axis.text.x = element_text(angle = 90))
 
 
 # c)
 euElections %>%
-  filter(Gruppenname %in% c("CDU", "CSU", "SPD", "AfD", "DIE LINKE", "GRNE", "FDP")) %>%
-  ggplot(aes(x=Gruppenname, y=Prozent)) + geom_boxplot() + theme_bw()
+  filter(Gruppenname %in% parteien) %>%
+  ggplot(aes(x=Gruppenname, y=Prozent)) + geom_boxplot() + 
+  theme_bw()
 
 # d)
 euElections %>%
@@ -36,11 +41,13 @@ euElections %>%
 
 germany <- getData("GADM", country="Germany", level=1)
 
+germany@data
+
 germany@data <- germany@data %>%
   left_join(euWinners, by=c("NAME_1"="Gebietsname"))
 
 pal = colorFactor(palette = c("black", "grey", "red", "green", "blue"),
-                  levels = c("CDU", "CSU", "SPD", "GRNE", "AfD"))
+                  levels = c("CDU", "CSU", "SPD", "GRÜNE", "AfD"))
 
 leaflet() %>%
   addTiles() %>%
@@ -55,8 +62,6 @@ euElections = read_csv2("https://www.bundeswahlleiter.de/dam/jcr/5441f564-1f29-4
 euElections %>%
   filter(Gebietsart == 'Kreis', Gruppenart == "Partei") -> euElections
 
-euElections$Gruppenname = iconv(euElections$Gruppenname, from = 'latin1', to = 'ascii', sub="")
-
 euElections %>%
   group_by(Gebietsname) %>%
   filter(Prozent == max(Prozent)) -> euWinners
@@ -64,7 +69,7 @@ euElections %>%
 germany <- getData("GADM", country="Germany", level=2)
 
 germany@data <- germany@data %>%
-  left_join(euWinners, by=c("NAME_2"="Gebietsname"))
+  left_join(euWinners, by=c("CC_2"="Gebietsnummer"))
 
 leaflet() %>%
   addTiles() %>%

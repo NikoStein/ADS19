@@ -404,6 +404,7 @@ credit_train_preprocessed
 # A tibble: 24,001 x 40
    LIMIT_BAL   AGE BILL_AMT1 BILL_AMT2 BILL_AMT3 BILL_AMT4 BILL_AMT5
        <dbl> <dbl>     <dbl>     <dbl>     <dbl>     <dbl>     <dbl>
+<<<<<<< HEAD
  1     0.154  2.61    0.0527   0.0432    0.00989   0         0      
  2     0.925  2.82    0.0361   0.0240    0.0385    0.0507    0.0567 
  3     0.694  3.69    0.394    0.195     0.195     0.222     0.245  
@@ -414,6 +415,18 @@ credit_train_preprocessed
  8     1.08   3.04    0.152    0.196     0.174     0.189     0.194  
  9     0.154  3.80    0        0         0         0         0.213  
 10     1.54   3.69    0.149    0.136     0.0794    0.0389    0.0300 
+=======
+ 1     0.154  2.60    0.0532   0.0436    0.00994   0         0      
+ 2     0.926  2.81    0.0364   0.0243    0.0387    0.0509    0.0568 
+ 3     0.694  3.68    0.397    0.197     0.196     0.223     0.246  
+ 4     0.386  4.00    0.638    0.679     0.711     0.440     0.476  
+ 5     0.386  6.16    0.117    0.0798    0.517     0.325     0.315  
+ 6     3.86   3.14    5.00     5.80      6.42      8.43      7.94   
+ 7     0.772  2.49    0.161    0.00535   0.00867   0.00343  -0.00261
+ 8     1.08   3.03    0.153    0.198     0.175     0.190     0.194  
+ 9     0.154  3.78    0        0         0         0         0.214  
+10     1.54   3.68    0.150    0.138     0.0798    0.0391    0.0301 
+>>>>>>> master
 # … with 23,991 more rows, and 33 more variables: BILL_AMT6 <dbl>,
 #   PAY_AMT1 <dbl>, PAY_AMT2 <dbl>, PAY_AMT3 <dbl>, PAY_AMT4 <dbl>,
 #   PAY_AMT5 <dbl>, PAY_AMT6 <dbl>, default <fct>, SEX_X2 <dbl>,
@@ -431,7 +444,10 @@ Specifying the models
 
 
 ```r
+<<<<<<< HEAD
 library(parsnip)
+=======
+>>>>>>> master
 logistic_glm <-
   logistic_reg(mode = "classification") %>%
   set_engine("glm") %>%
