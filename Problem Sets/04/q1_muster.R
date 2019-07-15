@@ -15,3 +15,11 @@ basketball %>%
 basketball %>%
   ggplot(aes(x=loc_x, y=loc_y, fill=as.factor(shot_made_flag))) + 
   geom_bin2d() + theme_bw()
+
+stat_bin_hex()
+
+basketball %>%
+  ggplot(aes(x=loc_x, y=loc_y)) + 
+  stat_bin_hex(aes(group=as.factor(shot_made_flag), fill=stat(density))) + theme_bw() + facet_grid()
+
+               
