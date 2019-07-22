@@ -47,6 +47,7 @@ A credit default example
 
 ```{r}
 library(tidyverse)
+library(recipes)
 credit = read.csv2("../Lecture Code/UCI_Credit_Card.csv", sep=",", dec=".")
 
 ```
@@ -115,7 +116,7 @@ Writing and applying the recipe
     * When including all variables we can write `default ~ .`
     
 ```{r}
-library(tidymodels)
+library(rsample)
 # define the recipe (it looks a lot like applying the lm function)
 model_recipe <- recipe(default ~ ., 
                        data = credit_train)
@@ -223,6 +224,7 @@ Specifying the models
 ====
 
 ```{r}
+library(parsnip)
 logistic_glm <-
   logistic_reg(mode = "classification") %>%
   set_engine("glm") %>%

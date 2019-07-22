@@ -48,6 +48,7 @@ A credit default example
 
 ```r
 library(tidyverse)
+library(recipes)
 credit = read.csv2("../Lecture Code/UCI_Credit_Card.csv", sep=",", dec=".")
 ```
 
@@ -239,7 +240,7 @@ Writing and applying the recipe
     
 
 ```r
-library(tidymodels)
+library(rsample)
 # define the recipe (it looks a lot like applying the lm function)
 model_recipe <- recipe(default ~ ., 
                        data = credit_train)
@@ -403,16 +404,16 @@ credit_train_preprocessed
 # A tibble: 24,001 x 40
    LIMIT_BAL   AGE BILL_AMT1 BILL_AMT2 BILL_AMT3 BILL_AMT4 BILL_AMT5
        <dbl> <dbl>     <dbl>     <dbl>     <dbl>     <dbl>     <dbl>
- 1     0.154  2.60    0.0532   0.0436    0.00994   0         0      
- 2     0.926  2.81    0.0364   0.0243    0.0387    0.0509    0.0568 
- 3     0.694  3.68    0.397    0.197     0.196     0.223     0.246  
- 4     0.386  4.00    0.638    0.679     0.711     0.440     0.476  
- 5     0.386  6.16    0.117    0.0798    0.517     0.325     0.315  
- 6     3.86   3.14    5.00     5.80      6.42      8.43      7.94   
- 7     0.772  2.49    0.161    0.00535   0.00867   0.00343  -0.00261
- 8     1.08   3.03    0.153    0.198     0.175     0.190     0.194  
- 9     0.154  3.78    0        0         0         0         0.214  
-10     1.54   3.68    0.150    0.138     0.0798    0.0391    0.0301 
+ 1     0.926  2.82    0.0366   0.0243    0.0388    0.0512    0.0571 
+ 2     0.695  3.69    0.399    0.198     0.196     0.224     0.247  
+ 3     0.386  4.02    0.642    0.680     0.713     0.443     0.479  
+ 4     0.386  6.19    0.118    0.0800    0.518     0.328     0.317  
+ 5     3.86   3.15    5.02     5.81      6.44      8.50      7.99   
+ 6     0.772  2.50    0.162    0.00536   0.00870   0.00346  -0.00263
+ 7     1.08   3.04    0.154    0.199     0.175     0.191     0.195  
+ 8     0.154  3.80    0        0         0         0         0.215  
+ 9     1.54   3.69    0.151    0.138     0.0801    0.0393    0.0302 
+10     2.01   5.54    0.167    0.306     0.144     0.133     0.368  
 # … with 23,991 more rows, and 33 more variables: BILL_AMT6 <dbl>,
 #   PAY_AMT1 <dbl>, PAY_AMT2 <dbl>, PAY_AMT3 <dbl>, PAY_AMT4 <dbl>,
 #   PAY_AMT5 <dbl>, PAY_AMT6 <dbl>, default <fct>, SEX_X2 <dbl>,
@@ -430,6 +431,7 @@ Specifying the models
 
 
 ```r
+library(parsnip)
 logistic_glm <-
   logistic_reg(mode = "classification") %>%
   set_engine("glm") %>%
