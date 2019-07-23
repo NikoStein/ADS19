@@ -14,8 +14,7 @@ basketball = read_csv2("basketball_complete.csv")
 #a)
 basketball %>%
   ggplot(aes(x=loc_x, y=loc_y)) + 
-  stat_summary_hex(aes(z=as.numeric(shot_made_flag))) + theme_bw() + facet_grid()
-
+  stat_summary_hex(aes(z=as.numeric(shot_made_flag))) + theme_bw() 
 
 #b)
 # first look
@@ -35,7 +34,8 @@ model_recipe %>%
   step_string2factor(combined_shot_type, season, shot_type) %>%
   step_num2factor(period, playoffs, shot_made_flag) %>%
   step_dummy(combined_shot_type, season, shot_type, period, playoffs) %>%
-  step_scale(all_numeric()) -> model_recipe_steps
+  step_scale(all_numeric()) %>%
+  step_center(all_numeric()) -> model_recipe_steps
 
 # Prep and bake
 prepped_recipe = prep(model_recipe_steps, training = basketball_train)
