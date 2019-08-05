@@ -23,6 +23,6 @@ getNodesAndInformationFromUrl = function(url)
 }
 
 
-# d) 
+# d)
 # Write your code here
 
