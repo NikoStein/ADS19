@@ -24,7 +24,6 @@ files %>%
 textData$category = categories
 textData$text = as.character(textData$text)
 
-
 #b)
 library(tidytext)
 
@@ -33,12 +32,16 @@ textData %>%
   unnest_tokens(word, text) %>%
   anti_join(stop_words) %>%
   count(word, sort = TRUE) %>%
-  top_n(5) %>%
-  arrange(desc(n), .by_group = TRUE) -> termFrequencies
-
+  top_n(5) -> termFrequencies
+  
 termFrequencies %>%
   ggplot(aes(x=reorder(word, n), y=n)) +
   geom_col(position="dodge") + facet_wrap(.~category, scales = 'free') + coord_flip() + theme_bw()
+
+termFrequencies %>%
+  ggplot(aes(x=word, y=n)) +
+  geom_col(position="dodge") + facet_wrap(.~category, scales = 'free') + coord_flip() + theme_bw()
+
 
 
 textData %>%
