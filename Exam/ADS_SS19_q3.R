@@ -2,7 +2,7 @@
 
 # Question 3:
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(tidyverse, tidymodels, recipes, parsnip, xgboost)
+pacman::p_load(tidyverse, tidymodels, recipes, parsnip, xgboost, titanic)
 
 titanic = titanic::titanic_train
 
